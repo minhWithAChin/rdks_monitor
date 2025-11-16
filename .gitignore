@@ -205,3 +205,13 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+functions.c
+main.c
+.gitignore
+Nucleo_Serial_Datenversand.ino
+.gitignore
+specs.txt
+plan.txt
+sw_todo.txt
+.gitignore
+sketch_oct21a/sketch_oct21a.ino
