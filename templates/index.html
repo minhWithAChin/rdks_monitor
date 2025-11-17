@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flask + WebSocket</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
+</head>
+<body>
+    <h1>WebSocket-Chat</h1>
+    <input id="msg" type="text" placeholder="Nachricht senden...">
+    <button onclick="send()">Senden</button>
+    <ul id="messages"></ul>
+
+    <script>
+        const socket = io(); // Verbindung zur Flask-App
+
+        function send() {
+            const msg = document.getElementById('msg').value;
+            socket.emit('message', msg);
+            document.getElementById('msg').value = '';
+        }
+
+        socket.on('response', function(data) {
+            const li = document.createElement('li');
+            li.textContent = data;
+            document.getElementById('messages').appendChild(li);
+        });
+    </script>
+</body>
+</html>

@@ -370,6 +370,7 @@
             }
         }
     </style>
+    <script src="/static/socket.io.js"></script>
 </head>
 <body>
     <!-- LOGIN SCREEN -->
@@ -522,6 +523,7 @@
                 loginError.textContent = "";
                 loginScreen.classList.add("hidden");
                 appScreen.classList.remove("hidden");
+                socket.emit('message', "init");
             } else {
                 loginError.textContent = "Falscher Benutzername oder Passwort.";
             }
@@ -556,34 +558,54 @@
 
         // URL des JSON-Endpunkts (kann auf Server konfiguriert werden)
         const JSON_API_URL = "/api"; // Beispiel-URL
+        const socket = io(); // Verbindung zur Flask-App
+        
+        socket.on('response', function(data) {
+            console.log(data)
+            // try {
+            //     let json = JSON.parse(data);
+            // }
+            // catch {
+            //     alert(
+            //         "Die Antwort vom Server ist kein gültiges JSON-Array. Erwartet: [{...}, {...}]."
+            //     );
+            //     return;
+            // }
 
-        loadDataBtn.addEventListener("click", async () => {
-            try {
-                const response = await fetch(JSON_API_URL,{Method:"GET"});
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
+            fullData = data;
+            buildColumns();
+            applyFilter();
+            emptyHint.style.display = "none";
 
-                const json = await response.json();
-
-                if (!Array.isArray(json)) {
-                    alert(
-                        "Die Antwort vom Server ist kein gültiges JSON-Array. Erwartet: [{...}, {...}]."
-                    );
-                    return;
-                }
-
-                fullData = json;
-                buildColumns();
-                applyFilter();
-                emptyHint.style.display = "none";
-            } catch (err) {
-                console.error("Fehler beim Laden der Daten:", err);
-                alert(
-                    "Konnte die JSON-Daten vom Server nicht laden. Überprüfe die Netzwerkverbindung oder den Server-Endpunkt."
-                );
-            }
+            
         });
+        // loadDataBtn.addEventListener("click", async () => {
+        //     try {
+        //         const response = await fetch(JSON_API_URL,{Method:"GET"});
+        //         if (!response.ok) {
+        //             throw new Error(`HTTP error! status: ${response.status}`);
+        //         }
+
+        //         const json = await response.json();
+
+        //         if (!Array.isArray(json)) {
+        //             alert(
+        //                 "Die Antwort vom Server ist kein gültiges JSON-Array. Erwartet: [{...}, {...}]."
+        //             );
+        //             return;
+        //         }
+
+        //         fullData = json;
+        //         buildColumns();
+        //         applyFilter();
+        //         emptyHint.style.display = "none";
+        //     } catch (err) {
+        //         console.error("Fehler beim Laden der Daten:", err);
+        //         alert(
+        //             "Konnte die JSON-Daten vom Server nicht laden. Überprüfe die Netzwerkverbindung oder den Server-Endpunkt."
+        //         );
+        //     }
+        // });
 
         filterInput.addEventListener("input", () => {
             applyFilter();
