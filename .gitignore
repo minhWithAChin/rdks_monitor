@@ -215,3 +215,5 @@ plan.txt
 sw_todo.txt
 .gitignore
 sketch_oct21a/sketch_oct21a.ino
+netzplan.xcf
+microcon.cpp
